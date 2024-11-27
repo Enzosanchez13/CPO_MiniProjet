@@ -11,33 +11,41 @@ package miniprojet_duo_SANCHEZ;
 import java.util.Scanner;
 
 public class Partie {
-    private GrilleDeJeu grilleDeJeu;
-    private Scanner scanner;
+    private GrilleDeJeu grille;
 
     public Partie(int nbLignes, int nbColonnes, int nbBombes) {
-        grilleDeJeu = new GrilleDeJeu(nbLignes, nbColonnes, nbBombes);
-        scanner = new Scanner(System.in);
+        this.grille = new GrilleDeJeu(nbLignes, nbColonnes, nbBombes);
     }
 
     public void demarrer() {
-        while (true) {
-            System.out.println(grilleDeJeu.afficherGrille());
-            System.out.println("Entrez la ligne et la colonne (par exemple: 1 2): ");
+        Scanner scanner = new Scanner(System.in);
+        while (!grille.estPartieTerminee()) {
+            System.out.println(grille.toString()); // Affiche la grille avant chaque tour
+            System.out.print("Entrez la ligne et la colonne à révéler (ex: 2 3) : ");
             int ligne = scanner.nextInt();
             int colonne = scanner.nextInt();
-            
-            // Révéler la cellule
-            grilleDeJeu.revelerCellule(ligne, colonne);
-            
-            if (grilleDeJeu.toutesCellulesRevelees()) {
-                System.out.println("Félicitations, vous avez gagné !");
+
+            // Vérification des limites de la grille
+            if (ligne < 0 || ligne >= grille.getNbLignes() || colonne < 0 || colonne >= grille.getNbColonnes()) {
+                System.out.println("Coordonnées invalides, essayez encore.");
+                continue;
+            }
+
+            // Révéler la cellule demandée
+            grille.revelerCellule(ligne, colonne);
+
+            // Vérifier si une bombe a été révélée
+            if (grille.getCellule(ligne, colonne).getPresenceBombe()) {
+                System.out.println("Vous avez touché une bombe ! Partie terminée.");
+                break;
+            }
+
+            // Vérifier si la partie est terminée
+            if (grille.estPartieTerminee()) {
+                System.out.println("Félicitations ! Vous avez gagné.");
                 break;
             }
         }
-    }
-
-    public static void main(String[] args) {
-        Partie partie = new Partie(5, 5, 5); // 5x5 grille et 5 bombes
-        partie.demarrer();
+        scanner.close();
     }
 }
