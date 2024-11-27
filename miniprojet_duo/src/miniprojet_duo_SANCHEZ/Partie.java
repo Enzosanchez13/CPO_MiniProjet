@@ -11,81 +11,33 @@ package miniprojet_duo_SANCHEZ;
 import java.util.Scanner;
 
 public class Partie {
-    private GrilleDeJeu grille;
-    private int vies;
-    private boolean partieEnCours;
+    private GrilleDeJeu grilleDeJeu;
+    private Scanner scanner;
 
     public Partie(int nbLignes, int nbColonnes, int nbBombes) {
-        this.grille = new GrilleDeJeu(nbLignes, nbColonnes, nbBombes);
-        this.vies = 3; // Nombre de vies du joueur
-        this.partieEnCours = true;
+        grilleDeJeu = new GrilleDeJeu(nbLignes, nbColonnes, nbBombes);
+        scanner = new Scanner(System.in);
     }
 
-    public void demarrerPartie() {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Bienvenue dans le jeu de Démineur !");
-        System.out.println("Vous commencez avec " + vies + " vies.");
-        System.out.println("Voici la grille initiale :");
-        System.out.println(grille); // Affichage de la grille au début
-
-        while (partieEnCours) {
-            System.out.println("\nQue voulez-vous faire ?");
-            System.out.println("1 - Révéler une cellule");
-            System.out.println("2 - Afficher le nombre de vies restantes");
-            System.out.println("3 - Afficher la grille");
-            System.out.println("4 - Quitter la partie");
-
-            int choix = scanner.nextInt();
-
-            switch (choix) {
-                case 1:
-                    // Révéler une cellule
-                    System.out.print("Entrez la ligne (0 à " + (grille.getNbLignes() - 1) + ") : ");
-                    int ligne = scanner.nextInt();
-                    System.out.print("Entrez la colonne (0 à " + (grille.getNbColonnes() - 1) + ") : ");
-                    int colonne = scanner.nextInt();
-
-                    if (grille.getPresenceBombe(ligne, colonne)) {
-                        System.out.println("BOOM ! Vous avez touché une bombe !");
-                        vies--;
-                    } else {
-                        grille.revelerCellule(ligne, colonne);
-                        System.out.println("Cellule révélée !");
-                    }
-
-                    if (vies <= 0) {
-                        System.out.println("Vous avez perdu toutes vos vies !");
-                        partieEnCours = false;
-                    }
-                    break;
-
-                case 2:
-                    System.out.println("Il vous reste " + vies + " vies.");
-                    break;
-
-                case 3:
-                    System.out.println("Voici l'état actuel de la grille :");
-                    System.out.println(grille); // Affichage de l'état actuel de la grille
-                    break;
-
-                case 4:
-                    System.out.println("Vous avez quitté la partie.");
-                    partieEnCours = false; // Quitter la partie
-                    break;
-
-                default:
-                    System.out.println("Option invalide. Veuillez choisir entre 1 et 4.");
-                    break;
-            }
-
-            // Vérification de la victoire
-            if (grille.toutesCellulesRevelees()) {
-                System.out.println("Félicitations ! Vous avez gagné !");
-                partieEnCours = false;
+    public void demarrer() {
+        while (true) {
+            System.out.println(grilleDeJeu.afficherGrille());
+            System.out.println("Entrez la ligne et la colonne (par exemple: 1 2): ");
+            int ligne = scanner.nextInt();
+            int colonne = scanner.nextInt();
+            
+            // Révéler la cellule
+            grilleDeJeu.revelerCellule(ligne, colonne);
+            
+            if (grilleDeJeu.toutesCellulesRevelees()) {
+                System.out.println("Félicitations, vous avez gagné !");
+                break;
             }
         }
+    }
 
-        System.out.println("Fin de la partie !");
+    public static void main(String[] args) {
+        Partie partie = new Partie(5, 5, 5); // 5x5 grille et 5 bombes
+        partie.demarrer();
     }
 }
