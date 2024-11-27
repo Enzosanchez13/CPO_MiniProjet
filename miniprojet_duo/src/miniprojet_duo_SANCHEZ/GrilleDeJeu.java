@@ -20,48 +20,32 @@ public class GrilleDeJeu {
         this.nbLignes = nbLignes;
         this.nbColonnes = nbColonnes;
         this.nbBombes = nbBombes;
-
-        matriceCellules = new Cellule[nbLignes][nbColonnes];
+        this.matriceCellules = new Cellule[nbLignes][nbColonnes];
+        
+        // Initialisation des cellules
         for (int i = 0; i < nbLignes; i++) {
             for (int j = 0; j < nbColonnes; j++) {
                 matriceCellules[i][j] = new Cellule();
             }
         }
-
+        
         placerBombesAleatoirement();
         calculerBombesAdjacentes();
     }
 
-    // Méthodes d'accès aux attributs
-    public int getNbLignes() {
-        return nbLignes;  // Retourne le nombre de lignes de la grille
-    }
-
-    public int getNbColonnes() {
-        return nbColonnes;  // Retourne le nombre de colonnes de la grille
-    }
-
-    public int getNbBombes() {
-        return nbBombes;  // Retourne le nombre total de bombes
-    }
-
-    // Méthode pour placer les bombes aléatoirement sur la grille
     private void placerBombesAleatoirement() {
-        Random random = new Random();
+        Random rand = new Random();
         int bombesPlacees = 0;
-
         while (bombesPlacees < nbBombes) {
-            int ligne = random.nextInt(nbLignes);
-            int colonne = random.nextInt(nbColonnes);
-
-            if (!matriceCellules[ligne][colonne].getPresenceBombe()) {
-                matriceCellules[ligne][colonne].placerBombe();
+            int i = rand.nextInt(nbLignes);
+            int j = rand.nextInt(nbColonnes);
+            if (!matriceCellules[i][j].getPresenceBombe()) {
+                matriceCellules[i][j].placerBombe();
                 bombesPlacees++;
             }
         }
     }
 
-    // Méthode pour calculer les bombes adjacentes à chaque cellule
     private void calculerBombesAdjacentes() {
         for (int i = 0; i < nbLignes; i++) {
             for (int j = 0; j < nbColonnes; j++) {
@@ -84,32 +68,30 @@ public class GrilleDeJeu {
         }
     }
 
-    // Révéler une cellule
-    public void revelerCellule(int ligne, int colonne) {
-        if (ligne < 0 || ligne >= nbLignes || colonne < 0 || colonne >= nbColonnes) return;
+    public void revelerCellule(int i, int j) {
+        if (i < 0 || i >= nbLignes || j < 0 || j >= nbColonnes || matriceCellules[i][j].estDevoilee()) {
+            return;
+        }
 
-        Cellule cellule = matriceCellules[ligne][colonne];
-        if (cellule.estDevoilee()) return;
-
-        cellule.revelerCellule();
-
-        if (!cellule.getPresenceBombe() && cellule.getNbBombesAdjacentes() == 0) {
+        matriceCellules[i][j].revelerCellule();
+        
+        if (matriceCellules[i][j].getPresenceBombe()) {
+            System.out.println("BOOM! Vous avez perdu.");
+            System.exit(0); // Fin de la partie
+        } else if (matriceCellules[i][j].getNbBombesAdjacentes() == 0) {
+            // Propagation automatique des cellules vides adjacentes
             for (int di = -1; di <= 1; di++) {
                 for (int dj = -1; dj <= 1; dj++) {
-                    if (di != 0 || dj != 0) {
-                        revelerCellule(ligne + di, colonne + dj);
+                    int ni = i + di;
+                    int nj = j + dj;
+                    if (ni >= 0 && ni < nbLignes && nj >= 0 && nj < nbColonnes) {
+                        revelerCellule(ni, nj);
                     }
                 }
             }
         }
     }
 
-    // Vérifier la présence d'une bombe à une position donnée
-    public boolean getPresenceBombe(int ligne, int colonne) {
-        return matriceCellules[ligne][colonne].getPresenceBombe();
-    }
-
-    // Vérifier si toutes les cellules sûres ont été révélées
     public boolean toutesCellulesRevelees() {
         for (int i = 0; i < nbLignes; i++) {
             for (int j = 0; j < nbColonnes; j++) {
@@ -121,9 +103,7 @@ public class GrilleDeJeu {
         return true;
     }
 
-    // Méthode pour afficher la grille
-    @Override
-    public String toString() {
+    public String afficherGrille() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < nbLignes; i++) {
             for (int j = 0; j < nbColonnes; j++) {
@@ -132,5 +112,17 @@ public class GrilleDeJeu {
             sb.append("\n");
         }
         return sb.toString();
+    }
+
+    int getNbLignes() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    int getNbColonnes() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    boolean toutesLesCellulesSuresRevelees() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
