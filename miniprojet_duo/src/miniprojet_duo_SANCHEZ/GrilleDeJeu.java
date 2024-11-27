@@ -11,34 +11,39 @@ package miniprojet_duo_SANCHEZ;
 import java.util.Random;
 
 public class GrilleDeJeu {
-    private Cellule[][] matriceCellules;
     private int nbLignes;
     private int nbColonnes;
     private int nbBombes;
+    private Cellule[][] matriceCellules;
 
     public GrilleDeJeu(int nbLignes, int nbColonnes, int nbBombes) {
         this.nbLignes = nbLignes;
         this.nbColonnes = nbColonnes;
         this.nbBombes = nbBombes;
         this.matriceCellules = new Cellule[nbLignes][nbColonnes];
-        
-        // Initialisation des cellules
+
+        // Initialiser la matrice de cellules
         for (int i = 0; i < nbLignes; i++) {
             for (int j = 0; j < nbColonnes; j++) {
                 matriceCellules[i][j] = new Cellule();
             }
         }
-        
+
+        // Placer les bombes de manière aléatoire
         placerBombesAleatoirement();
+
+        // Calculer les bombes adjacentes pour chaque cellule
         calculerBombesAdjacentes();
     }
 
     private void placerBombesAleatoirement() {
-        Random rand = new Random();
+        Random random = new Random();
         int bombesPlacees = 0;
+
         while (bombesPlacees < nbBombes) {
-            int i = rand.nextInt(nbLignes);
-            int j = rand.nextInt(nbColonnes);
+            int i = random.nextInt(nbLignes);
+            int j = random.nextInt(nbColonnes);
+
             if (!matriceCellules[i][j].getPresenceBombe()) {
                 matriceCellules[i][j].placerBombe();
                 bombesPlacees++;
@@ -50,60 +55,53 @@ public class GrilleDeJeu {
         for (int i = 0; i < nbLignes; i++) {
             for (int j = 0; j < nbColonnes; j++) {
                 if (!matriceCellules[i][j].getPresenceBombe()) {
-                    int count = 0;
+                    int nbBombesAdjacentes = 0;
                     for (int di = -1; di <= 1; di++) {
                         for (int dj = -1; dj <= 1; dj++) {
-                            int ni = i + di;
-                            int nj = j + dj;
-                            if (ni >= 0 && ni < nbLignes && nj >= 0 && nj < nbColonnes) {
-                                if (matriceCellules[ni][nj].getPresenceBombe()) {
-                                    count++;
+                            if (i + di >= 0 && i + di < nbLignes && j + dj >= 0 && j + dj < nbColonnes) {
+                                if (matriceCellules[i + di][j + dj].getPresenceBombe()) {
+                                    nbBombesAdjacentes++;
                                 }
                             }
                         }
                     }
-                    matriceCellules[i][j].setNbBombesAdjacentes(count);
+                    matriceCellules[i][j].setNbBombesAdjacentes(nbBombesAdjacentes);
                 }
             }
         }
     }
 
     public void revelerCellule(int i, int j) {
-        if (i < 0 || i >= nbLignes || j < 0 || j >= nbColonnes || matriceCellules[i][j].estDevoilee()) {
-            return;
-        }
+        // Si la cellule est valide et non déjà révélée
+        if (i >= 0 && i < nbLignes && j >= 0 && j < nbColonnes && !matriceCellules[i][j].estDevoilee()) {
+            matriceCellules[i][j].reveler();
 
-        matriceCellules[i][j].revelerCellule();
-        
-        if (matriceCellules[i][j].getPresenceBombe()) {
-            System.out.println("BOOM! Vous avez perdu.");
-            System.exit(0); // Fin de la partie
-        } else if (matriceCellules[i][j].getNbBombesAdjacentes() == 0) {
-            // Propagation automatique des cellules vides adjacentes
-            for (int di = -1; di <= 1; di++) {
-                for (int dj = -1; dj <= 1; dj++) {
-                    int ni = i + di;
-                    int nj = j + dj;
-                    if (ni >= 0 && ni < nbLignes && nj >= 0 && nj < nbColonnes) {
-                        revelerCellule(ni, nj);
+            // Si la cellule révélée n'a pas de bombes adjacentes, révéler les cellules adjacentes
+            if (matriceCellules[i][j].getNbBombesAdjacentes() == 0) {
+                for (int di = -1; di <= 1; di++) {
+                    for (int dj = -1; dj <= 1; dj++) {
+                        if (i + di >= 0 && i + di < nbLignes && j + dj >= 0 && j + dj < nbColonnes) {
+                            revelerCellule(i + di, j + dj);
+                        }
                     }
                 }
             }
         }
     }
 
-    public boolean toutesCellulesRevelees() {
+    public boolean estPartieTerminee() {
         for (int i = 0; i < nbLignes; i++) {
             for (int j = 0; j < nbColonnes; j++) {
-                if (!matriceCellules[i][j].getPresenceBombe() && !matriceCellules[i][j].estDevoilee()) {
+                // Si une cellule n'est pas révélée et ce n'est pas une bombe, la partie n'est pas terminée
+                if (!matriceCellules[i][j].estDevoilee() && !matriceCellules[i][j].getPresenceBombe()) {
                     return false;
                 }
             }
         }
-        return true;
+        return true; // Si toutes les cellules sûres sont révélées, la partie est terminée
     }
 
-    public String afficherGrille() {
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < nbLignes; i++) {
             for (int j = 0; j < nbColonnes; j++) {
@@ -113,16 +111,19 @@ public class GrilleDeJeu {
         }
         return sb.toString();
     }
+    
+    
+    public Cellule getCellule(int i, int j) {
+    return matriceCellules[i][j];
+}
 
-    int getNbLignes() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+public int getNbLignes() {
+    return nbLignes;
+}
 
-    int getNbColonnes() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+public int getNbColonnes() {
+    return nbColonnes;
+}
 
-    boolean toutesLesCellulesSuresRevelees() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+
 }
