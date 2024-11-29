@@ -21,7 +21,7 @@ public class Partie {
         Scanner scanner = new Scanner(System.in);
         while (!grille.estPartieTerminee()) {
             System.out.println(grille.toString()); // Affiche la grille avant chaque tour
-            System.out.print("Entrez la ligne et la colonne à révéler (ex: 2 3) : ");
+            System.out.print("Entrez la ligne et la colonne à révéler (ex: 0 3) : ");
             int ligne = scanner.nextInt();
             int colonne = scanner.nextInt();
 
@@ -36,7 +36,7 @@ public class Partie {
 
             // Vérifier si une bombe a été révélée
             if (grille.getCellule(ligne, colonne).getPresenceBombe()) {
-                System.out.println("Vous avez touché une bombe ! Partie terminée.");
+                System.out.println("Vous avez touché une bombe ! la partie est terminée.");
                 break;
             }
 
