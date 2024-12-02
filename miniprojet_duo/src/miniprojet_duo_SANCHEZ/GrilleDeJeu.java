@@ -36,7 +36,7 @@ public class GrilleDeJeu {
         calculerBombesAdjacentes();
     }
 
-    private void placerBombesAleatoirement() {
+    public void placerBombesAleatoirement() {
         Random random = new Random();
         int bombesPlacees = 0;
 
@@ -51,7 +51,7 @@ public class GrilleDeJeu {
         }
     }
 
-    private void calculerBombesAdjacentes() {
+    public void calculerBombesAdjacentes() {
         for (int i = 0; i < nbLignes; i++) {
             for (int j = 0; j < nbColonnes; j++) {
                 if (!matriceCellules[i][j].getPresenceBombe()) {
