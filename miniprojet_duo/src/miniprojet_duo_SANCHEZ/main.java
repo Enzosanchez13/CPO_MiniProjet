@@ -13,17 +13,29 @@ import java.util.Scanner;
 public class main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        
-        // Demander les paramètres du jeu
-        System.out.print("Entrez le nombre de lignes: ");
+
+        // Demande des paramètres de la partie au joueur
+        System.out.println("Bienvenue dans le jeu de démineur !");
+        System.out.print("Entrez le nombre de lignes de la grille : ");
         int lignes = scanner.nextInt();
-        System.out.print("Entrez le nombre de colonnes: ");
+
+        System.out.print("Entrez le nombre de colonnes de la grille : ");
         int colonnes = scanner.nextInt();
-        System.out.print("Entrez le nombre de bombes: ");
+
+        System.out.print("Entrez le nombre de bombes : ");
         int bombes = scanner.nextInt();
-        
-        // Démarrer la partie
+
+        // Validation des paramètres
+        if (bombes >= lignes * colonnes) {
+            System.out.println("Erreur : Le nombre de bombes doit être inférieur au nombre total de cellules.");
+            return;
+        }
+
+        // Initialisation et démarrage de la partie
         Partie partie = new Partie(lignes, colonnes, bombes);
-        partie.demarrer();
+        partie.demarrerPartie(); // Lance la boucle principale de la partie
+
+        System.out.println("Merci d'avoir joué !");
+        scanner.close();
     }
 }
