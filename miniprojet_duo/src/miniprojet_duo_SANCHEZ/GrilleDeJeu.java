@@ -11,119 +11,121 @@ package miniprojet_duo_SANCHEZ;
 import java.util.Random;
 
 public class GrilleDeJeu {
+    private Cellule[][] grille;
     private int nbLignes;
     private int nbColonnes;
     private int nbBombes;
-    private Cellule[][] matriceCellules;
 
     public GrilleDeJeu(int nbLignes, int nbColonnes, int nbBombes) {
         this.nbLignes = nbLignes;
         this.nbColonnes = nbColonnes;
         this.nbBombes = nbBombes;
-        this.matriceCellules = new Cellule[nbLignes][nbColonnes];
+        this.grille = new Cellule[nbLignes][nbColonnes];
+        initialiserGrille();
+    }
 
-        // Initialiser la matrice de cellules
+    public int getNbLignes() {
+        return nbLignes;
+    }
+
+    public int getNbColonnes() {
+        return nbColonnes;
+    }
+
+    public Cellule getCellule(int ligne, int colonne) {
+        return grille[ligne][colonne];
+    }
+
+    // Initialisation de la grille et placement des bombes
+    public void initialiserGrille() {
+        // Initialiser chaque cellule
         for (int i = 0; i < nbLignes; i++) {
             for (int j = 0; j < nbColonnes; j++) {
-                matriceCellules[i][j] = new Cellule();
+                grille[i][j] = new Cellule();
             }
         }
 
-        // Placer les bombes de manière aléatoire
-        placerBombesAleatoirement();
-
-        // Calculer les bombes adjacentes pour chaque cellule
-        calculerBombesAdjacentes();
-    }
-
-    public void placerBombesAleatoirement() {
-        Random random = new Random();
+        // Placer les bombes aléatoirement
+        Random rand = new Random();
         int bombesPlacees = 0;
-
         while (bombesPlacees < nbBombes) {
-            int i = random.nextInt(nbLignes);
-            int j = random.nextInt(nbColonnes);
-
-            if (!matriceCellules[i][j].getPresenceBombe()) {
-                matriceCellules[i][j].placerBombe();
+            int ligne = rand.nextInt(nbLignes);
+            int colonne = rand.nextInt(nbColonnes);
+            if (!grille[ligne][colonne].getPresenceBombe()) {
+                grille[ligne][colonne].setPresenceBombe(true);
                 bombesPlacees++;
+                incrementerVoisines(ligne, colonne);
             }
         }
     }
 
-    public void calculerBombesAdjacentes() {
-        for (int i = 0; i < nbLignes; i++) {
-            for (int j = 0; j < nbColonnes; j++) {
-                if (!matriceCellules[i][j].getPresenceBombe()) {
-                    int nbBombesAdjacentes = 0;
-                    for (int di = -1; di <= 1; di++) {
-                        for (int dj = -1; dj <= 1; dj++) {
-                            if (i + di >= 0 && i + di < nbLignes && j + dj >= 0 && j + dj < nbColonnes) {
-                                if (matriceCellules[i + di][j + dj].getPresenceBombe()) {
-                                    nbBombesAdjacentes++;
-                                }
-                            }
-                        }
-                    }
-                    matriceCellules[i][j].setNbBombesAdjacentes(nbBombesAdjacentes);
+    // Incrémenter le nombre de bombes voisines des cellules autour
+    public void incrementerVoisines(int ligne, int colonne) {
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                int l = ligne + i;
+                int c = colonne + j;
+                if (l >= 0 && l < nbLignes && c >= 0 && c < nbColonnes && !(i == 0 && j == 0)) {
+                    grille[l][c].setBombesVoisines(grille[l][c].getBombesVoisines() + 1);
                 }
             }
         }
     }
 
-    public void revelerCellule(int i, int j) {
-        // Si la cellule est valide et non déjà révélée
-        if (i >= 0 && i < nbLignes && j >= 0 && j < nbColonnes && !matriceCellules[i][j].estDevoilee()) {
-            matriceCellules[i][j].reveler();
+    // Révéler une cellule
+    public void revelerCellule(int ligne, int colonne) {
+        Cellule cellule = grille[ligne][colonne];
+        if (cellule.isRevelee()) return;
 
-            // Si la cellule révélée n'a pas de bombes adjacentes, révéler les cellules adjacentes
-            if (matriceCellules[i][j].getNbBombesAdjacentes() == 0) {
-                for (int di = -1; di <= 1; di++) {
-                    for (int dj = -1; dj <= 1; dj++) {
-                        if (i + di >= 0 && i + di < nbLignes && j + dj >= 0 && j + dj < nbColonnes) {
-                            revelerCellule(i + di, j + dj);
-                        }
+        cellule.reveler();
+        if (cellule.getBombesVoisines() == 0 && !cellule.getPresenceBombe()) {
+            // Révéler les cellules voisines si la cellule n'a pas de bombes autour
+            for (int i = -1; i <= 1; i++) {
+                for (int j = -1; j <= 1; j++) {
+                    int l = ligne + i;
+                    int c = colonne + j;
+                    if (l >= 0 && l < nbLignes && c >= 0 && c < nbColonnes) {
+                        revelerCellule(l, c);
                     }
                 }
             }
         }
     }
 
-    public boolean estPartieTerminee() {
+    // Vérifie si toutes les cellules sûres ont été révélées
+    public boolean estVictoire() {
         for (int i = 0; i < nbLignes; i++) {
             for (int j = 0; j < nbColonnes; j++) {
-                // Si une cellule n'est pas révélée et ce n'est pas une bombe, la partie n'est pas terminée
-                if (!matriceCellules[i][j].estDevoilee() && !matriceCellules[i][j].getPresenceBombe()) {
+                Cellule cellule = grille[i][j];
+                if (!cellule.getPresenceBombe() && !cellule.isRevelee()) {
                     return false;
                 }
             }
         }
-        return true; // Si toutes les cellules sûres sont révélées, la partie est terminée
+        return true;
     }
 
+    // Vérifie si la partie est terminée (victoire ou défaite)
+    public boolean estPartieTerminee() {
+        for (int i = 0; i < nbLignes; i++) {
+            for (int j = 0; j < nbColonnes; j++) {
+                if (grille[i][j].getPresenceBombe() && grille[i][j].isRevelee()) {
+                    return true; // Une bombe a été révélée -> partie terminée
+                }
+            }
+        }
+        return estVictoire();
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < nbLignes; i++) {
             for (int j = 0; j < nbColonnes; j++) {
-                sb.append(matriceCellules[i][j].toString()).append(" ");
+                sb.append(grille[i][j].toString()).append(" ");
             }
             sb.append("\n");
         }
         return sb.toString();
     }
-    
-    
-    public Cellule getCellule(int i, int j) {
-    return matriceCellules[i][j];
-}
-
-public int getNbLignes() {
-    return nbLignes;
-}
-
-public int getNbColonnes() {
-    return nbColonnes;
-}
-
-
 }
