@@ -1,3 +1,5 @@
+package miniprojet_duo_SANCHEZ;
+
 
 import java.awt.GridLayout;
 import javax.swing.JButton;
@@ -14,7 +16,6 @@ import miniprojet_duo_SANCHEZ.GrilleDeJeu;
  */
 public class FenetrePrincipale extends javax.swing.JFrame {
     GrilleDeJeu grille;
-    
     public FenetrePrincipale() {
         initComponents();
         int nbLignes = 10;
@@ -27,10 +28,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
                } 
             } 
         }
-    public void initialiserPartie() {
-        grille.placerBombesaAleatoirement();
-        
-    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -46,7 +44,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         PanneauGrille.setBackground(new java.awt.Color(51, 255, 51));
-        PanneauGrille.setLayout(new java.awt.GridLayout());
+        PanneauGrille.setLayout(new java.awt.GridLayout(1, 0));
         getContentPane().add(PanneauGrille, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 90, 400, 400));
 
         pack();

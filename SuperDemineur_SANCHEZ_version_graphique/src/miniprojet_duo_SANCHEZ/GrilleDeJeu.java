@@ -125,5 +125,9 @@ public int getNbColonnes() {
     return nbColonnes;
 }
 
+    public void placerBombesaAleatoirement() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 
 }
