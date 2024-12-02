@@ -1,6 +1,7 @@
 
 import java.awt.GridLayout;
 import javax.swing.JButton;
+import miniprojet_duo_SANCHEZ.GrilleDeJeu;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -12,9 +13,8 @@ import javax.swing.JButton;
  * @author enzos
  */
 public class FenetrePrincipale extends javax.swing.JFrame {
-    /**
-     * Creates new form FenetrePrincipale
-     */
+    GrilleDeJeu grille;
+    
     public FenetrePrincipale() {
         initComponents();
         int nbLignes = 10;
@@ -27,7 +27,10 @@ public class FenetrePrincipale extends javax.swing.JFrame {
                } 
             } 
         }
-
+    public void initialiserPartie() {
+        grille.placerBombesaAleatoirement();
+        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
