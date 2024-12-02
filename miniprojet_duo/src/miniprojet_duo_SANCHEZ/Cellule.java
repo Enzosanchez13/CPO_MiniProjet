@@ -10,47 +10,43 @@ package miniprojet_duo_SANCHEZ;
  */
 public class Cellule {
     private boolean presenceBombe;
-    private boolean devoilee;
-    private int nbBombesAdjacentes;
+    private boolean revelee;
+    private int bombesVoisines;
 
     public Cellule() {
         this.presenceBombe = false;
-        this.devoilee = false;
-        this.nbBombesAdjacentes = 0;
-    }
-
-    // Placer une bombe dans la cellule
-    public void placerBombe() {
-        this.presenceBombe = true;
+        this.revelee = false;
+        this.bombesVoisines = 0;
     }
 
     public boolean getPresenceBombe() {
-        return this.presenceBombe;
+        return presenceBombe;
     }
 
-    public boolean estDevoilee() {
-        return this.devoilee;
+    public void setPresenceBombe(boolean presenceBombe) {
+        this.presenceBombe = presenceBombe;
+    }
+
+    public boolean isRevelee() {
+        return revelee;
     }
 
     public void reveler() {
-        this.devoilee = true;
+        this.revelee = true;
     }
 
-    public void setNbBombesAdjacentes(int nbBombesAdjacentes) {
-        this.nbBombesAdjacentes = nbBombesAdjacentes;
+    public int getBombesVoisines() {
+        return bombesVoisines;
     }
 
-    public int getNbBombesAdjacentes() {
-        return this.nbBombesAdjacentes;
+    public void setBombesVoisines(int bombesVoisines) {
+        this.bombesVoisines = bombesVoisines;
     }
 
+    @Override
     public String toString() {
-        if (!devoilee) {
-            return "?"; // Cellule non révélée
-        }
-        if (presenceBombe) {
-            return "B"; // Cellule avec une bombe
-        }
-        return nbBombesAdjacentes > 0 ? String.valueOf(nbBombesAdjacentes) : " "; // Cellule sans bombe et sans bombes adjacentes
+        if (!revelee) return ".";
+        if (presenceBombe) return "B";
+        return String.valueOf(bombesVoisines);
     }
 }
