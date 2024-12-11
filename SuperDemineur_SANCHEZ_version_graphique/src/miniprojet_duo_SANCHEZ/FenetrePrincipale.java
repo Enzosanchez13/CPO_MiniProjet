@@ -1,34 +1,96 @@
-package miniprojet_duo_SANCHEZ;
 
+    package miniprojet_duo_SANCHEZ;
 
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JButton;
-import miniprojet_duo_SANCHEZ.GrilleDeJeu;
+import javax.swing.JOptionPane;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
-
-/**
- *
- * @author enzos
- */
 public class FenetrePrincipale extends javax.swing.JFrame {
+
     GrilleDeJeu grille;
+    JButton[][] boutons;
+
     public FenetrePrincipale() {
-        initComponents();
+        initComponents(); // Méthode générée par NetBeans, ne pas modifier.
+        
         int nbLignes = 10;
-        int nbColonnes=10;
-        PanneauGrille.setLayout(new GridLayout(nbLignes,nbColonnes));
-        for (int i=0; i < nbLignes; i++) { 
-            for (int j=0; j < nbColonnes; j++ ) { 
-               JButton bouton_cellule = new JButton(); // création d'un bouton 
-               PanneauGrille.add(bouton_cellule); // ajout au Jpanel PanneauGrille 
-               } 
-            } 
+        int nbColonnes = 10;
+        int nbBombes = 20; // Nombre de bombes par défaut
+
+        // Initialisation des éléments de la grille de jeu
+        grille = new GrilleDeJeu(nbLignes, nbColonnes, nbBombes);
+        boutons = new JButton[nbLignes][nbColonnes];
+
+        // Configure le panneau après l'initialisation
+        PanneauGrille.setLayout(new GridLayout(nbLignes, nbColonnes));
+
+        for (int i = 0; i < nbLignes; i++) {
+            for (int j = 0; j < nbColonnes; j++) {
+                JButton bouton_cellule = new JButton();
+                boutons[i][j] = bouton_cellule;
+                PanneauGrille.add(bouton_cellule);
+
+                int ligne = i;
+                int colonne = j;
+
+                bouton_cellule.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        revelerCellule(ligne, colonne);
+                    }
+                });
+            }
         }
-    
+
+        pack(); // Ajuste la taille de la fenêtre après avoir ajouté les composants
+    }
+
+    private void revelerCellule(int ligne, int colonne) {
+        if (grille.getCellule(ligne, colonne).estDevoilee()) {
+            return;
+        }
+
+        grille.revelerCellule(ligne, colonne);
+        mettreAJourBoutons();
+
+        if (grille.getCellule(ligne, colonne).getPresenceBombe()) {
+            JOptionPane.showMessageDialog(this, "Vous avez touché une bombe ! La partie est terminée.", "Perdu", JOptionPane.ERROR_MESSAGE);
+            desactiverBoutons();
+        } else if (grille.estPartieTerminee()) {
+            JOptionPane.showMessageDialog(this, "Félicitations ! Vous avez gagné.", "Gagné", JOptionPane.INFORMATION_MESSAGE);
+            desactiverBoutons();
+        }
+    }
+
+    private void mettreAJourBoutons() {
+        for (int i = 0; i < grille.getNbLignes(); i++) {
+            for (int j = 0; j < grille.getNbColonnes(); j++) {
+                Cellule cellule = grille.getCellule(i, j);
+                JButton bouton = boutons[i][j];
+
+                if (cellule.estDevoilee()) {
+                    bouton.setEnabled(false);
+                    if (cellule.getPresenceBombe()) {
+                        bouton.setText("B");
+                    } else {
+                        int nbBombesAdjacentes = cellule.getNbBombesAdjacentes();
+                        bouton.setText(nbBombesAdjacentes > 0 ? String.valueOf(nbBombesAdjacentes) : "");
+                    }
+                }
+            }
+        }
+    }
+
+    private void desactiverBoutons() {
+        for (int i = 0; i < grille.getNbLignes(); i++) {
+            for (int j = 0; j < grille.getNbColonnes(); j++) {
+                boutons[i][j].setEnabled(false);
+            }
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -43,7 +105,8 @@ public class FenetrePrincipale extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        PanneauGrille.setBackground(new java.awt.Color(51, 255, 51));
+        PanneauGrille.setBackground(new java.awt.Color(255, 0, 0));
+        PanneauGrille.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         PanneauGrille.setLayout(new java.awt.GridLayout(1, 0));
         getContentPane().add(PanneauGrille, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 90, 400, 400));
 
