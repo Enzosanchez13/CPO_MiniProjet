@@ -11,10 +11,11 @@ package miniprojet_duo_SANCHEZ;
 import java.util.Random;
 
 public class GrilleDeJeu {
-    private int nbLignes;
-    private int nbColonnes;
-    private int nbBombes;
-    private Cellule[][] matriceCellules;
+    public int nbLignes;
+    public int nbColonnes;
+    public int nbBombes;
+    public Cellule[][] matriceCellules;
+    public int getNbBombe;
 
     public GrilleDeJeu(int nbLignes, int nbColonnes, int nbBombes) {
         this.nbLignes = nbLignes;
@@ -129,5 +130,7 @@ public int getNbColonnes() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-
+        public int getNbBombes() {
+    return nbBombes; // Variable qui stocke le nombre de bombes dans votre grille
+}
 }
