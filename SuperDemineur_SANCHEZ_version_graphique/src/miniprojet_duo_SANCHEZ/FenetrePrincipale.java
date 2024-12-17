@@ -116,8 +116,9 @@ public class FenetrePrincipale extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        PanneauGrille.setBackground(new java.awt.Color(255, 0, 0));
-        PanneauGrille.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        PanneauGrille.setBackground(new java.awt.Color(153, 153, 153));
+        PanneauGrille.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(0, 0, 0), new java.awt.Color(0, 0, 0), new java.awt.Color(0, 0, 0), new java.awt.Color(0, 0, 0)));
+        PanneauGrille.setForeground(new java.awt.Color(102, 102, 102));
         PanneauGrille.setLayout(new java.awt.GridLayout(1, 0));
         getContentPane().add(PanneauGrille, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 90, 400, 400));
 
@@ -129,10 +130,12 @@ public class FenetrePrincipale extends javax.swing.JFrame {
         });
         getContentPane().add(rejouer, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 60, -1, -1));
 
-        jPanel2.setBackground(new java.awt.Color(255, 0, 51));
+        jPanel2.setBackground(new java.awt.Color(0, 0, 0));
+        jPanel2.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(102, 102, 102)));
         jPanel2.setForeground(new java.awt.Color(255, 0, 51));
         jPanel2.setLayout(new java.awt.GridLayout());
 
+        niveau1.setForeground(new java.awt.Color(51, 51, 51));
         niveau1.setText("Niveau 1");
         niveau1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -141,6 +144,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
         });
         jPanel2.add(niveau1);
 
+        niveau2.setForeground(new java.awt.Color(51, 51, 51));
         niveau2.setText("Niveau 2");
         niveau2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -149,6 +153,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
         });
         jPanel2.add(niveau2);
 
+        niveau3.setForeground(new java.awt.Color(51, 51, 51));
         niveau3.setText("Niveau 3");
         niveau3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
