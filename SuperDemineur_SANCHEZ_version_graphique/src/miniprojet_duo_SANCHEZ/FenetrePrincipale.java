@@ -34,7 +34,7 @@ private void ajouterBoutonPersonnalise() {
     });
 
     // Ajout du bouton à la fenêtre
-    this.getContentPane().add(modePersonnalise, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 240, 260, 30));
+    this.getContentPane().add(modePersonnalise, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 240, 260, 30));
 
     // Mise à jour de l'affichage
     this.revalidate();
@@ -194,7 +194,7 @@ private void modePersonnaliseActionPerformed(ActionEvent evt) {
         PanneauGrille.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(0, 0, 0), new java.awt.Color(0, 0, 0), new java.awt.Color(0, 0, 0), new java.awt.Color(0, 0, 0)));
         PanneauGrille.setForeground(new java.awt.Color(102, 102, 102));
         PanneauGrille.setLayout(new java.awt.GridLayout(1, 0));
-        getContentPane().add(PanneauGrille, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 490, 430));
+        getContentPane().add(PanneauGrille, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 520, 430));
 
         rejouer.setText("REJOUER");
         rejouer.addActionListener(new java.awt.event.ActionListener() {
@@ -236,13 +236,13 @@ private void modePersonnaliseActionPerformed(ActionEvent evt) {
         });
         jPanel2.add(niveau3);
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 150, 260, 80));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 140, 260, 80));
 
         jLabel1.setText("M: Marquer cases (clique droit)");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 90, 170, 20));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 90, 170, 20));
 
         jLabel2.setText("B: Bombes");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 110, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 110, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
