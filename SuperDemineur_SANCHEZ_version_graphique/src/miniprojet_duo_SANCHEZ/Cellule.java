@@ -12,6 +12,7 @@ public class Cellule {
     private boolean presenceBombe;
     private boolean devoilee;
     private int nbBombesAdjacentes;
+    private boolean marquee = false;
 
     public Cellule() {
         this.presenceBombe = false;
@@ -53,4 +54,6 @@ public class Cellule {
         }
         return nbBombesAdjacentes > 0 ? String.valueOf(nbBombesAdjacentes) : " "; // Cellule sans bombe et sans bombes adjacentes
     }
+    private boolean estMarquee;
+
 }
